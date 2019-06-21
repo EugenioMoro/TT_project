@@ -8,6 +8,8 @@ simple Sink
         
         @statistic[lifetime](title="lifetime of arrived msg"; unit=s; record=histogram,vector,mean,max; interpolationmode=none);
         @statistic[arrivedMsg](title="number of arrived msg"; record=vector,last; interpolationmode=none);
+        
+        int n_ports = default(1);
     gates:
-        input in;
+        input in[n_ports];
 }

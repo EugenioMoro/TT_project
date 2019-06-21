@@ -1,15 +1,15 @@
-file 1088 1561067332                                            
+file 9254485 1561154785                                         
 version 2
-run Net1-0-20190620-23:45:55-5261
+run Net1-0-20190622-00:05:21-24969
 attr configname Net1
-attr datetime 20190620-23:45:55
+attr datetime 20190622-00:05:21
 attr experiment Net1
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Net
-attr processid 5261
+attr processid 24969
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -21,23 +21,30 @@ param **.sys.serviceTime exponential(0.3s)
 vector 0 Net.queues[0] qlen:vector ETV
 attr interpolationmode sample-hold
 attr title "queue length, vector"
-vector 1 Net.queues[1] qlen:vector ETV
-attr interpolationmode sample-hold
-attr title "queue length, vector"
-vector 2 Net.queues[2] qlen:vector ETV
-attr interpolationmode sample-hold
-attr title "queue length, vector"
-vector 3 Net.queues[0] queueingTime:vector ETV
+vector 1 Net.queues[0] queueingTime:vector ETV
 attr interpolationmode none
 attr title "queueing time at dequeue, vector"
 attr unit s
-vector 4 Net.queues[1] queueingTime:vector ETV
+vector 2 Net.queues[0] responseTime:vector ETV
 attr interpolationmode none
-attr title "queueing time at dequeue, vector"
+attr title "response time at end of service, vector"
 attr unit s
-0	1020 17 0 10 0 0 2 0 1 1 1
-1	1037 26 0 14 0 0 3 0 2 3 5
-2	1063 8 0 0 0 0 1 0 0 0 0
-3	1071 8 6 6 0 0 1 0 0 0 0
-4	1079 8 8 8 0 0 1 0 0 0 0
+vector 3 Net.sink lifetime:vector ETV
+attr interpolationmode none
+attr title "lifetime of arrived msg, vector"
+attr unit s
+vector 4 Net.sink arrivedMsg:vector ETV
+attr interpolationmode none
+attr title "number of arrived msg, vector"
+0	1047 910188 0 80707 0 9918.209790347292 32768 0 33 155648 1453168
+1	911235 1270906 2 131079 0 16070.115666856689 32768 0 14.654451685358 53945.671122752 215909.67993962
+2	2182141 1351513 5 131083 0.74384168483 16070.483394062421 32768 8.3156098e-05 15.580359267301 66954.611846187 269233.15778761
+3	3533654 1351515 6 131084 0.74384168483 16070.483394062421 32768 8.3156098e-05 15.580359267301 66954.611846187 269233.15778761
+4	4885169 1048977 6 131084 0.74384168483 16070.483394062421 32768 1 32768 536887296 11728660905984
+0	5934146 975251 80710 161867 9918.277012754982 19861.950829192133 32768 0 28 147524 1249100
+0	6909397 260350 161869 183264 19862.073648740833 22527.78969719217 8668 0 22 40884 340382
+1	7169747 526490 131083 183257 16070.483394062421 22527.395388170673 13045 0 11.704937631429 22234.033554207 84784.795038246
+2	7696237 558089 131087 183257 16071.134449130925 22527.395388170673 13044 1.6025589e-05 12.037545817416 27503.757744465 107099.85592376
+3	8254326 558089 131088 183258 16071.134449130925 22527.395388170673 13044 1.6025589e-05 12.037545817416 27503.757744465 107099.85592376
+4	8812415 442069 131088 183258 16071.134449130925 22527.395388170673 13044 32769 45812 512505282 20321537413766
 

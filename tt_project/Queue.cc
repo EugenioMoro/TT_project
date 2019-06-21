@@ -1,7 +1,11 @@
 #include <omnetpp.h>
-
 using namespace omnetpp;
 
+class cCompletedServiceNotif: public omnetpp::cObject, public omnetpp::noncopyable {
+public:
+    int queueId;
+    simtime_t time;
+};
 
 class Queue : public cSimpleModule
 {
@@ -15,6 +19,13 @@ class Queue : public cSimpleModule
     simsignal_t busySignal;
     simsignal_t queueingTimeSignal;
     simsignal_t responseTimeSignal;
+    simsignal_t seviceCompletedSignal;
+    cCompletedServiceNotif tmp;
+
+    int avg_window=100;
+    int avgCount = 0;
+    int avg = 0;
+
 
     int queueId;
 
@@ -43,13 +54,17 @@ Queue::~Queue()
 
 void Queue::initialize()
 {
+    queueId=par("queueId");
     endServiceMsg = new cMessage("end-service");
-    queue.setName("queue");
+    queue.setName("queue" + queueId);
 
     qlenSignal = registerSignal("qlen");
     busySignal = registerSignal("busy");
     queueingTimeSignal = registerSignal("queueingTime");
     responseTimeSignal = registerSignal("responseTime");
+
+    //register the signal of service completion
+    seviceCompletedSignal = registerSignal("seviceCompletedSignal");
 
     emit(qlenSignal, queue.getLength());
     emit(busySignal, false);
@@ -64,6 +79,15 @@ void Queue::handleMessage(cMessage *msg)
 
         //Response time: time from msg arrival timestamp to time msg ends service (now)
         emit(responseTimeSignal, simTime() - msgServiced->getTimestamp());
+
+        //build and emit the service completion signal
+        //tmp.queueId = this->queueId;
+        //tmp.time = simTime() - msgServiced->getTimestamp();
+        //EV<<"emitting the DIO signal"<<endl;
+        //if (hasListeners(seviceCompletedSignal)){
+        //    EV<<"listener c'è"<<endl;
+        //}
+        //emit(seviceCompletedSignal, &tmp);
 
         if (queue.isEmpty()) { // Empty queue, server goes in IDLE
 
