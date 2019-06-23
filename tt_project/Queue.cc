@@ -20,12 +20,14 @@ class Queue : public cSimpleModule
     simsignal_t queueingTimeSignal;
     simsignal_t responseTimeSignal;
     simsignal_t seviceCompletedSignal;
+    simsignal_t interarrivalTimesSignal;
     cCompletedServiceNotif tmp;
 
-    int avg_window=100;
-    int avgCount = 0;
-    int avg = 0;
+    simtime_t lastArrivalTimestamp;
 
+    double arrivalCounts;
+    simtime_t avgWindowStart;
+    simtime_t avgWindowEnd;
 
     int queueId;
 
@@ -36,6 +38,7 @@ class Queue : public cSimpleModule
   protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    double getLambda();
 };
 
 Define_Module(Queue);
@@ -62,12 +65,17 @@ void Queue::initialize()
     busySignal = registerSignal("busy");
     queueingTimeSignal = registerSignal("queueingTime");
     responseTimeSignal = registerSignal("responseTime");
+    interarrivalTimesSignal = registerSignal("interarrivalTimes");
 
     //register the signal of service completion
     seviceCompletedSignal = registerSignal("seviceCompletedSignal");
 
     emit(qlenSignal, queue.getLength());
     emit(busySignal, false);
+
+    lastArrivalTimestamp = simTime();
+    arrivalCounts=0;
+    avgWindowStart=simTime();
 }
 
 void Queue::handleMessage(cMessage *msg)
@@ -113,8 +121,20 @@ void Queue::handleMessage(cMessage *msg)
     }
     else { // Data msg has arrived
 
+
+        //for debug pourposes
+        EV<<getLambda()<<endl;
+
         //Setting arrival timestamp as msg field
         msg->setTimestamp();
+        //compute the interarrival time between this and the previous msg and the signal it
+        emit(interarrivalTimesSignal, msg->getTimestamp()-lastArrivalTimestamp);
+        //now update the new last arrival time
+        lastArrivalTimestamp = msg->getTimestamp();
+
+        //update the counter of the arrivals
+        arrivalCounts++;
+
 
         if (!msgServiced) { //No message in service (server IDLE) ==> No queue ==> Direct service
 
@@ -136,3 +156,10 @@ void Queue::handleMessage(cMessage *msg)
        }
     }
 }
+
+double Queue::getLambda(){
+    //compute the lambda value by dividing the arrivals by the length of the avg window
+    simtime_t windowLen = simTime() - avgWindowStart;
+    return arrivalCounts/windowLen.inUnit(SIMTIME_S);
+}
+
