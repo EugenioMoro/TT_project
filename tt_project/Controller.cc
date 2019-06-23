@@ -15,10 +15,10 @@ Define_Module(Controller);
 
 void Controller::initialize()
 {
-    nexTurnMessage = new cMessage("nextTurnEvent");
-    nextSource=par("sources")-1;
+    nextTurnEvent = new cMessage("nextTurnEvent");
+    nextSource=(int)par("sources") - 1;
     EV<<"Controller Initialized:"<<endl;
-    EV<<"Controller will wait "<<par("waitBeforeNext")<<"seconds between each turn"<<endl;
+    EV<<"Controller will wait "<<(int)par("waitBeforeNext")<<"seconds between each turn"<<endl;
     scheduleAt(simTime(), nextTurnEvent);
 }
 
@@ -26,8 +26,12 @@ void Controller::initialize()
 
 void Controller::handleMessage(cMessage *msg)
 {
-    ASSERT(msg == nextTurnMessage);
+    ASSERT(msg == nextTurnEvent);
     EV<<"Controller: Turn of source "<<nextSource<<endl;
+
     //message to source
-    nextSource = (nextSource++) % par("sources");
+
+    //next source here
+    nextSource = (nextSource++) % (int)par("sources");
+    scheduleAt(simTime()+(int)par("waitBeforeNext"), nextTurnEvent);
 }

@@ -38,7 +38,7 @@ network Net
         }
         Controller: Controller {
             @display("p=392,102;i=block/cogwheel");
-            waitBeforeNext=50;
+            waitBeforeNext=1s;
             sources=n_sources;
         }
     connections allowunconnected: //we need to allow queues not to have all the ports connected
