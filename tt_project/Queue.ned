@@ -1,7 +1,7 @@
 simple Queue
 {
     parameters:
-        volatile double serviceTime @unit(s);
+        volatile double serviceTime;
         @display("i=block/queue;q=queue");
         
         @signal[qlen](type="long");
@@ -24,5 +24,7 @@ simple Queue
     	int n_ports = default(1);
     gates:
         input in[n_ports];
+        input arRequestGateIn;
+        output arRequestGateOut;
         output out;
 }

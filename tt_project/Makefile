@@ -30,10 +30,17 @@ PROJECTRELATIVE_PATH =
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/cCompletedServiceNotif.o $O/Controller.o $O/Queue.o $O/Sink.o $O/Source.o
+OBJS = \
+    $O/cCompletedServiceNotif.o \
+    $O/Controller.o \
+    $O/Queue.o \
+    $O/Sink.o \
+    $O/Source.o \
+    $O/arrivalRateMsg_m.o
 
 # Message files
-MSGFILES =
+MSGFILES = \
+    arrivalRateMsg.msg
 
 # SM files
 SMFILES =

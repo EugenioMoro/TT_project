@@ -1,0 +1,152 @@
+version 2
+run Net1-0-20190624-15:50:35-4737
+attr configname Net1
+attr datetime 20190624-15:50:35
+attr experiment Net1
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsf ""
+attr measurement ""
+attr network Net
+attr processid 4737
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+param **.gen.interArrivalTime exponential(0.5s)
+param **.sys.serviceTime exponential(0.3s)
+
+scalar Net.queues[0] interarrivalTimes:mean 0.49640586710281
+attr title "interarrival time of the queue, mean"
+attr unit s
+scalar Net.queues[0] responseTime:mean 2.0044870459394
+attr interpolationmode none
+attr title "response time at end of service, mean"
+attr unit s
+scalar Net.queues[0] responseTime:max 15.80635818727
+attr interpolationmode none
+attr title "response time at end of service, max"
+attr unit s
+scalar Net.queues[0] queueingTime:mean 1.6046532409412
+attr interpolationmode none
+attr title "queueing time at dequeue, mean"
+attr unit s
+scalar Net.queues[0] queueingTime:max 15.164008322129
+attr interpolationmode none
+attr title "queueing time at dequeue, max"
+attr unit s
+scalar Net.queues[0] busy:timeavg 0.80544298717961
+attr interpolationmode sample-hold
+attr title "server busy state, timeavg"
+scalar Net.queues[0] qlen:timeavg 3.2324848064737
+attr interpolationmode sample-hold
+attr title "queue length, timeavg"
+scalar Net.queues[0] qlen:max 37
+attr interpolationmode sample-hold
+attr title "queue length, max"
+scalar Net.sink arrivedMsg:last 72520
+attr interpolationmode none
+attr title "number of arrived msg, last"
+statistic Net.sink lifetime:histogram
+field count 72520
+field mean 2.0044870459394
+field stddev 1.972344793208
+field min 1.6025589e-05
+field max 15.80635818727
+field sum 145365.40057152
+field sqrsum 573492.41389794
+attr interpolationmode none
+attr title "lifetime of arrived msg, histogram"
+attr unit s
+bin	-inf	0
+bin	0	6827
+bin	0.2	6214
+bin	0.4	5559
+bin	0.6	5073
+bin	0.8	4505
+bin	1	4403
+bin	1.2	3920
+bin	1.4	3520
+bin	1.6	3133
+bin	1.8	2775
+bin	2	2470
+bin	2.2	2304
+bin	2.4	2026
+bin	2.6	1816
+bin	2.8	1735
+bin	3	1446
+bin	3.2	1360
+bin	3.4	1211
+bin	3.6	1140
+bin	3.8	1023
+bin	4	861
+bin	4.2	817
+bin	4.4	809
+bin	4.6	707
+bin	4.8	625
+bin	5	581
+bin	5.2	535
+bin	5.4	516
+bin	5.6	464
+bin	5.8	389
+bin	6	405
+bin	6.2	329
+bin	6.4	314
+bin	6.6	287
+bin	6.8	276
+bin	7	243
+bin	7.2	223
+bin	7.4	180
+bin	7.6	159
+bin	7.8	135
+bin	8	130
+bin	8.2	123
+bin	8.4	123
+bin	8.6	81
+bin	8.8	91
+bin	9	68
+bin	9.2	45
+bin	9.4	39
+bin	9.6	35
+bin	9.8	44
+bin	10	42
+bin	10.2	48
+bin	10.4	42
+bin	10.6	30
+bin	10.8	23
+bin	11	24
+bin	11.2	20
+bin	11.4	23
+bin	11.6	26
+bin	11.8	12
+bin	12	14
+bin	12.2	16
+bin	12.4	16
+bin	12.6	11
+bin	12.8	11
+bin	13	9
+bin	13.2	6
+bin	13.4	6
+bin	13.6	8
+bin	13.8	12
+bin	14	5
+bin	14.2	6
+bin	14.4	1
+bin	14.6	6
+bin	14.8	3
+bin	15	0
+bin	15.2	2
+bin	15.4	3
+bin	15.6	0
+bin	15.8	1
+bin	16	0
+scalar Net.sink lifetime:mean 2.0044870459394
+attr interpolationmode none
+attr title "lifetime of arrived msg, mean"
+attr unit s
+scalar Net.sink lifetime:max 15.80635818727
+attr interpolationmode none
+attr title "lifetime of arrived msg, max"
+attr unit s
+

@@ -1,4 +1,5 @@
 #include <omnetpp.h>
+#include "arrivalRateMsg_m.h"
 using namespace omnetpp;
 
 class cCompletedServiceNotif: public omnetpp::cObject, public omnetpp::noncopyable {
@@ -9,12 +10,13 @@ public:
 
 class Queue : public cSimpleModule
 {
-  protected:
+protected:
     cMessage *msgServiced;
     cMessage *endServiceMsg;
 
-    cQueue queue;
+    arrivalRateMsg *arMessage;
 
+    cQueue queue;
     simsignal_t qlenSignal;
     simsignal_t busySignal;
     simsignal_t queueingTimeSignal;
@@ -22,7 +24,6 @@ class Queue : public cSimpleModule
     simsignal_t seviceCompletedSignal;
     simsignal_t interarrivalTimesSignal;
     cCompletedServiceNotif tmp;
-
     simtime_t lastArrivalTimestamp;
 
     double arrivalCounts;
@@ -31,11 +32,11 @@ class Queue : public cSimpleModule
 
     int queueId;
 
-  public:
+public:
     Queue();
     virtual ~Queue();
 
-  protected:
+protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     double getLambda();
@@ -81,7 +82,6 @@ void Queue::initialize()
 void Queue::handleMessage(cMessage *msg)
 {
     if (msg == endServiceMsg) { // Self-message arrived
-
         EV << "Completed service of " << msgServiced->getName() << endl;
         send(msgServiced, "out");
 
@@ -104,7 +104,7 @@ void Queue::handleMessage(cMessage *msg)
             emit(busySignal, false);
 
         }
-        else { // Queue contains users
+        else{// Queue contains users
 
             msgServiced = (cMessage *)queue.pop();
             emit(qlenSignal, queue.getLength()); //Queue length changed, emit new length!
@@ -115,15 +115,48 @@ void Queue::handleMessage(cMessage *msg)
             EV << "Starting service of " << msgServiced->getName() << endl;
             simtime_t serviceTime = par("serviceTime");
             scheduleAt(simTime()+serviceTime, endServiceMsg);
-
         }
-
     }
     else { // Data msg has arrived
 
+        if(strcmp(msg->getName(),"arMessage") == 0) {
+            arMessage = check_and_cast<arrivalRateMsg *>(msg);
+            EV<<"Queue "<<queueId<<": received arrival rate request from source: "<<arMessage->getSourceID()<<endl;
+            int sourceId=arMessage->getSourceID();
+            //delete arMessage;
+            arrivalRateMsg* response = new arrivalRateMsg("arMessage");
+            //put ask bool to false
+            response->setAsk(false);
+            //add lambda and mu to message
+            response->setLambda(getLambda());
+            response->setMu(1/(double)par("serviceTime"));
+            //connect to source and send
+            cModule * answerTo = getParentModule()->getSubmodule("isps", arMessage->getSourceID());
+                       if(answerTo==NULL){
+                           EV<<"ERROR NULL POINTER MODULE (MODULE NOT FOUND) "<<arMessage->getSourceID()<<endl;
+                       } else {
+                       cGate * answerGate = answerTo->gate("in");
+                       cGate * outGate = gate("arRequestGateOut");
+                       outGate->disconnect();
+                       outGate->connectTo(answerGate);
+                       EV<<"Queue :"<<queueId<<": answering to source "<<arMessage->getSourceID()<<" with lambda="<<getLambda()<<endl;
+                       send(response, outGate);
+                       outGate->disconnect();
+                       }
+            //ready for next message
+            return;
+        }
+
+        if(strcmp(msg->getName(),"DISCONNECT") == 0 || strcmp(msg->getName(),"CONNECT") == 0){
+            //if connection variation, reset average window and arrival counts
+            EV<<"Queue "<<queueId<<": received connect/disconnect message, resetting avg window"<<endl;
+            avgWindowStart=simTime();
+            arrivalCounts = 0;
+            return;
+        }
 
         //for debug pourposes
-        EV<<getLambda()<<endl;
+        //EV<<getLambda()<<endl;
 
         //Setting arrival timestamp as msg field
         msg->setTimestamp();
@@ -144,7 +177,7 @@ void Queue::handleMessage(cMessage *msg)
             emit(queueingTimeSignal, SIMTIME_ZERO);
 
             EV << "Starting service of " << msgServiced->getName() << endl;
-            simtime_t serviceTime = par("serviceTime");;
+            simtime_t serviceTime = exponential((double)par("serviceTime"), 0);
             scheduleAt(simTime()+serviceTime, endServiceMsg);
             emit(busySignal, true);
         }
@@ -153,7 +186,7 @@ void Queue::handleMessage(cMessage *msg)
             queue.insert(msg);
             emit(qlenSignal, queue.getLength()); //Queue length changed, emit new length!
 
-       }
+        }
     }
 }
 

@@ -1,0 +1,40 @@
+version 2
+run General-0-20190624-20:49:53-24848
+attr configname General
+attr datetime 20190624-20:49:53
+attr experiment General
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsf ""
+attr measurement ""
+attr network Net
+attr processid 24848
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+
+vector 0 Net.queues[0] qlen:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 1 Net.queues[1] qlen:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 2 Net.queues[2] qlen:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 3 Net.queues[0] queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time at dequeue, vector"
+attr unit s
+vector 4 Net.queues[1] queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time at dequeue, vector"
+attr unit s
+0	0	0	0
+1	0	0	0
+2	0	0	0
+3	4	0	0
+4	5	0	0
+

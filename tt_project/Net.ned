@@ -1,31 +1,31 @@
 network Net
 {
     parameters:
-        int n_queues = default(1);
-        int n_sources = default(1);
+        int n_queues = default(3);
+        int n_sources = default(2);
 
+        @display("bgb=549,310");
     submodules:
 
         isps[n_sources]: Source {
             parameters:
         	    //set sourceid as index of the vector
                 sourceId = index;
-
+                nQueues = n_queues;
                 //choose random queue for this source to be initially connected to
                 associatedQueueId = intuniform(0,n_queues-1);
 
                 @display("p=100,50,c,70");
-                interArrivalTime=exponential(0.5s);
-                //@display("p=448,131");
+                interArrivalTime = 0.5;
         }
 
         queues[n_queues]: Queue {
             parameters:
                 //set queue id as index of the vector
                 queueId = index;
-                //set as many posrts are the sources (worst case)
+                //set as many ports as the sources (worst case)
                 n_ports = n_sources;
-				serviceTime=exponential(0.4s);
+                //serviceTime = 0.4;
                 @display("p=250,50,c,70");
         }
 
@@ -36,10 +36,12 @@ network Net
 
                 @display("p=448,41");
         }
-        Controller: Controller {
-            @display("p=392,102;i=block/cogwheel");
-            waitBeforeNext=1s;
-            sources=n_sources;
+        controller: Controller {
+            parameters:
+            	waitBeforeNext=10s;
+		    	sources=n_sources;
+		    	@display("p=458,217;i=block/cogwheel");
+            
         }
     connections allowunconnected: //we need to allow queues not to have all the ports connected
 

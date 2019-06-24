@@ -4,4 +4,6 @@ simple Controller{
 		parameters:
 		    int waitBeforeNext @unit(s);
 		    int sources;
+		gates:
+		    output out;
 }
